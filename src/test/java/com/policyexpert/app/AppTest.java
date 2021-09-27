@@ -26,7 +26,11 @@ public class AppTest extends TestSetup
     public void sampleTest() {
         WaitFunction waitFunction = new WaitFunction(testContext);
         waitFunction.waitUntilPageLoad();
-//        Selectors selectors = new Selectors();
-//        selectors.findFieldElement();
+        Selectors selectors = new Selectors(testContext);
+        selectors.findFieldElement("select", "Mr");
+        selectors.findFieldElement("input", "Jake");
+        selectors.findFieldElement("input", "Masters");
+        selectors.dateHandler("10", "April", "1993");
+        selectors.findFieldElement("select", "Married");
     }
 }
