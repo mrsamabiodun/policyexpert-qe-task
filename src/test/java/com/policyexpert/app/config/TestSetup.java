@@ -1,6 +1,7 @@
 package com.policyexpert.app.config;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.FileInputStream;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public abstract class TestSetup {
 
@@ -21,9 +23,9 @@ public abstract class TestSetup {
     {
         Properties properties = new Properties();
         try {
-            String propertiesPath = System.getProperty("user.dir");
-//            String testPropertiesPath = rootPath + "test.properties";
-            properties.load(new FileInputStream("/Users/abiodunt/COUNTER/policyexpert-qe-task/src/test/java/com/policyexpert/app/resources/test.properties"));
+            String workingDirectory = System.getProperty("user.dir");
+            String relativePropertiesPath = "/src/test/java/com/policyexpert/app/resources/test.properties";
+            properties.load(new FileInputStream(workingDirectory + relativePropertiesPath));
             testConfig = new TestConfig(properties);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,7 +33,6 @@ public abstract class TestSetup {
     }
 
     public void startTest() {
-
     }
 
     public void initializeWebDriver() {
@@ -51,6 +52,7 @@ public abstract class TestSetup {
     public void beforeEachTest() {
         initializeWebDriver();
         testContext = new TestContext(webDriver, testConfig);
+        testContext.getDriver().manage().timeouts().implicitlyWait(waitTime, TimeUnit.SECONDS);
         testContext.getDriver().navigate().to(testConfig.getTargetUrl());
     }
 }

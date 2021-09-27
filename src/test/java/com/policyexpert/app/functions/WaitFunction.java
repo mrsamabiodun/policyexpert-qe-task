@@ -2,7 +2,6 @@ package com.policyexpert.app.functions;
 
 import com.policyexpert.app.config.ContextLoader;
 import com.policyexpert.app.config.TestContext;
-import com.policyexpert.app.config.TestSetup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;

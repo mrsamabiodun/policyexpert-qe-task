@@ -24,11 +24,13 @@ public class Selectors extends ContextLoader {
 //    private WebElement field;
 
     int fieldsTally = testContext.getDriver().findElements(By.cssSelector("div[data-testid]")).size();
+    List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
+    List<WebElement> dateFields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='date-dropdowns']"));
+
+
     int i = 0;
 
     public void findFieldElement(String fieldType, String... testData) {
-//        int i = 0;
-        List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
 
         if (fieldType.contains("select")) {
             fields.get(i).findElement(By.tagName("select"));
@@ -46,9 +48,8 @@ public class Selectors extends ContextLoader {
 
     public void dateHandler(String day, String month, String year) {
         int j = 0;
-        List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='date-dropdowns']"));
 
-            List<WebElement> selectList = fields.get(j).findElements(By.tagName("select"));
+            List<WebElement> selectList = fields.get(i).findElements(By.tagName("select"));
             Select dayDropDown = new Select(selectList.get(0));
             dayDropDown.selectByValue(day);
 
@@ -63,7 +64,6 @@ public class Selectors extends ContextLoader {
     }
 
     public void lookupHandler(String input, String testData) {
-        List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
 
         WebElement field = fields.get(i).findElement(By.tagName("input"));
         field.click();
@@ -87,15 +87,16 @@ public class Selectors extends ContextLoader {
     }
 
     public void buttonHandler(String option) {
-        List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
 
         List<WebElement> buttons = fields.get(i).findElements(By.tagName("button"));
 
-            for (WebElement button : buttons) {
-                if (button.getText().contains(option)) {
-                    button.click();
-                }
+        for (WebElement button : buttons) {
+            if (button.getText().contains(option)) {
+                button.click();
             }
+        }
+
+        fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
 
         i++;
     }
