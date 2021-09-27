@@ -31,6 +31,8 @@ public class AppTest extends TestSetup
         selectors.findFieldElement("input", "Jake");
         selectors.findFieldElement("input", "Masters");
         selectors.dateHandler("10", "April", "1993");
-        selectors.findFieldElement("select", "Married");
+        selectors.findFieldElement("select", "Single");
+        selectors.lookupHandler("Ar", "Arborist");
+        selectors.buttonHandler("Yes");
     }
 }
