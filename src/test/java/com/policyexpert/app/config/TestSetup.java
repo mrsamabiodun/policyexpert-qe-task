@@ -1,13 +1,10 @@
 package com.policyexpert.app.config;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -38,8 +35,6 @@ public abstract class TestSetup {
     public void initializeWebDriver() {
         System.setProperty("webdriver.chrome.driver", testConfig.getWebDriverLocation());
         ChromeOptions options = new ChromeOptions();
-//        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-//        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
         this.webDriver = new ChromeDriver(options);
     }
 

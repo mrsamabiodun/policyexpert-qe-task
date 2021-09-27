@@ -1,36 +1,26 @@
-package com.policyexpert.app.selectors;
+package com.policyexpert.app.functions;
 
 import com.policyexpert.app.config.ContextLoader;
 import com.policyexpert.app.config.TestContext;
-import com.policyexpert.app.config.TestSetup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Iterator;
 import java.util.List;
 
-public class Selectors extends ContextLoader {
+public class SelectorFunctions extends ContextLoader {
 
-    public Selectors(TestContext testContext) {
+    public SelectorFunctions(TestContext testContext) {
         super(testContext);
     }
 
-//    @FindBy(className = "data-testid")
-//    private WebElement field;
-
-    int fieldsTally = testContext.getDriver().findElements(By.cssSelector("div[data-testid]")).size();
     List<WebElement> fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
-    List<WebElement> dateFields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='date-dropdowns']"));
-
-
     int i = 0;
 
-    public void findFieldElement(String fieldType, String... testData) {
+    public void fieldHandler(String fieldType, String... testData) {
 
         if (fieldType.contains("select")) {
             fields.get(i).findElement(By.tagName("select"));
@@ -47,7 +37,6 @@ public class Selectors extends ContextLoader {
     }
 
     public void dateHandler(String day, String month, String year) {
-        int j = 0;
 
             List<WebElement> selectList = fields.get(i).findElements(By.tagName("select"));
             Select dayDropDown = new Select(selectList.get(0));
@@ -59,7 +48,6 @@ public class Selectors extends ContextLoader {
             Select yearDropDown = new Select(selectList.get(2));
             yearDropDown.selectByValue(year);
 
-            j++;
             i++;
     }
 
@@ -70,8 +58,6 @@ public class Selectors extends ContextLoader {
         field.sendKeys(input);
 
         new WebDriverWait(testContext.getDriver(), 5).until(ExpectedConditions.presenceOfElementLocated(By.className("list-group")));
-
-//        fields.get(i).findElement(By.className("list-group-item")).click();
 
         List<WebElement> listItems = fields.get(i).findElements(By.className("list-group-item"));
 
@@ -90,14 +76,48 @@ public class Selectors extends ContextLoader {
 
         List<WebElement> buttons = fields.get(i).findElements(By.tagName("button"));
 
-        for (WebElement button : buttons) {
-            if (button.getText().contains(option)) {
-                button.click();
+        try {
+            for (WebElement button : buttons) {
+                if (button.getText().contains(option)) {
+                    button.click();
+                }
             }
+        } catch (StaleElementReferenceException e) {
+            i--;
         }
 
         fields = testContext.getDriver().findElements(By.cssSelector("div[data-testid='question']"));
 
         i++;
     }
+
+    public void addressHandler(String input, String primaryTestData, String secondaryTestData) {
+
+        WebElement field = fields.get(i).findElement(By.tagName("input"));
+        field.click();
+        field.sendKeys(input);
+
+        new WebDriverWait(testContext.getDriver(), 5).until(ExpectedConditions.presenceOfElementLocated(By.className("list-group")));
+
+        List<WebElement> primaryListItems = fields.get(i).findElements(By.className("list-group-item"));
+
+        try {
+            for (WebElement primaryListItem : primaryListItems) {
+                if (primaryListItem.getText().contains(primaryTestData))
+                    primaryListItem.click();
+            }
+
+            List<WebElement> secondaryListItems = fields.get(i).findElements(By.className("list-group-item"));
+
+            for (WebElement secondaryListItem : secondaryListItems) {
+                if (secondaryListItem.getText().contains(secondaryTestData))
+                    secondaryListItem.click();
+            }
+
+        } catch (StaleElementReferenceException e) {
+            field.click();
+        }
+        i++;
+    }
+
 }
